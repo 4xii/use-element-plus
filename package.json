@@ -5,14 +5,6 @@
   "description": "My awesome typescript library",
   "type": "module",
   "license": "MIT",
-  "homepage": "https://github.com/sxzz/ts-lib-starter#readme",
-  "bugs": {
-    "url": "https://github.com/sxzz/ts-lib-starter/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sxzz/ts-lib-starter.git"
-  },
   "files": [
     "dist"
   ],

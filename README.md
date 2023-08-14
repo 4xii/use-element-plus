@@ -9,4 +9,4 @@ npm i use-element-plus
 
 ## License
 
-[MIT](./LICENSE) License © 2023 [三咲智子](https://github.com/4xii)
+[MIT](./LICENSE) License © 2023 [4xii](https://github.com/4xii)

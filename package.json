@@ -38,30 +38,32 @@
   "devDependencies": {
     "@sxzz/eslint-config": "^3.3.2",
     "@sxzz/prettier-config": "^1.0.4",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/vue": "^7.0.0",
     "@types/node": "^20.4.8",
+    "@vue/test-utils": "^2.0.0",
+    "@vueuse/core": "^10.2.1",
     "bumpp": "^9.1.1",
     "cz-git": "^1.7.1",
+    "element-plus": "2.3.3",
     "eslint": "^8.46.0",
     "fast-glob": "^3.3.1",
+    "jsdom": "16.4.0",
     "prettier": "^3.0.1",
     "tsup": "^7.2.0",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
     "vitest": "^0.34.1",
-    "@vue/test-utils": "^2.0.0",
-    "element-plus": "2.3.3",
-    "jsdom": "16.4.0",
-    "vue": "^3.2.47",
-    "@vueuse/core": "^10.2.1"
+    "vue": "^3.2.47"
+  },
+  "engines": {
+    "node": ">=16.14.0"
   },
   "config": {
     "commitizen": {
       "path": "node_modules/cz-git",
       "useEmoji": true
     }
-  },
-  "engines": {
-    "node": ">=16.14.0"
   },
   "prettier": "@sxzz/prettier-config"
 }

@@ -47,7 +47,12 @@
     "tsup": "^7.2.0",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
-    "vitest": "^0.34.1"
+    "vitest": "^0.34.1",
+    "@vue/test-utils": "^2.0.0",
+    "element-plus": "2.3.3",
+    "jsdom": "16.4.0",
+    "vue": "^3.2.47",
+    "@vueuse/core": "^10.2.1"
   },
   "config": {
     "commitizen": {

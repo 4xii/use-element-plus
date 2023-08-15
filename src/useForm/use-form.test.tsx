@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, nextTick, ref } from 'vue'
 import { type FormInstance } from 'element-plus'
 import * as ElementPlus from 'element-plus'
 import { mount } from '@vue/test-utils'
@@ -20,10 +20,11 @@ describe('useForm', () => {
     },
   }
 
+  const submitMock = vi.fn()
   const App = defineComponent({
     setup() {
       const formRef = ref<FormInstance>()
-      const { formData, resetFields } = useForm({
+      const { formData, resetFields, handleSubmit } = useForm({
         formRef,
         initialFormData: defaultValues,
         basicFormData: basicValues,
@@ -37,11 +38,15 @@ describe('useForm', () => {
         resetFields({ type: 'basic' })
       }
 
+      const submit = handleSubmit(submitMock)
       return () => (
         <div>
           <el-form ref={formRef} model={formData.value}>
             <el-form-item label="fieldName">
-              <el-input v-model={formData.value.fieldName} ref="fieldNameInput" />
+              <el-input
+                v-model={formData.value.fieldName}
+                ref="fieldNameInput"
+              />
             </el-form-item>
             <el-form-item label="nestedField">
               <el-input
@@ -50,8 +55,15 @@ describe('useForm', () => {
               />
             </el-form-item>
           </el-form>
-          <button class="initalResetButton" onClick={handleInitialReset}>Reset to Initial</button>
-          <button class="basicResetButton" onClick={handleBasicReset}>Reset to Basic</button>
+          <button class="initalResetButton" onClick={handleInitialReset}>
+            Reset to Initial
+          </button>
+          <button class="basicResetButton" onClick={handleBasicReset}>
+            Reset to Basic
+          </button>
+          <button class="submitButton" onClick={submit}>
+            submit
+          </button>
         </div>
       )
     },
@@ -77,14 +89,20 @@ describe('useForm', () => {
     })
 
     const findSubmitButton = () => wrapper.find('.initalResetButton')
-    
+
     // Modify the form values
-    await wrapper.findComponent({ ref: 'fieldNameInput' }).setValue('modifiedValue')
-    await wrapper.findComponent({ ref: 'nestedFieldNameInput' }).setValue('modifiedNestedValue')
+    await wrapper
+      .findComponent({ ref: 'fieldNameInput' })
+      .setValue('modifiedValue')
+    await wrapper
+      .findComponent({ ref: 'nestedFieldNameInput' })
+      .setValue('modifiedNestedValue')
 
     // Verify the modified values
-    expect(wrapper.findAll('input')[0].element.value).toBe('modifiedValue');
-    expect(wrapper.findAll('input')[1].element.value).toBe('modifiedNestedValue')
+    expect(wrapper.findAll('input')[0].element.value).toBe('modifiedValue')
+    expect(wrapper.findAll('input')[1].element.value).toBe(
+      'modifiedNestedValue'
+    )
 
     // Click the "Reset to Initial" button
     await findSubmitButton().trigger('click')
@@ -104,14 +122,20 @@ describe('useForm', () => {
     })
 
     const findSubmitButton = () => wrapper.find('.basicResetButton')
-    
+
     // Modify the form values
-    await wrapper.findComponent({ ref: 'fieldNameInput' }).setValue('modifiedValue')
-    await wrapper.findComponent({ ref: 'nestedFieldNameInput' }).setValue('modifiedNestedValue')
+    await wrapper
+      .findComponent({ ref: 'fieldNameInput' })
+      .setValue('modifiedValue')
+    await wrapper
+      .findComponent({ ref: 'nestedFieldNameInput' })
+      .setValue('modifiedNestedValue')
 
     // Verify the modified values
-    expect(wrapper.findAll('input')[0].element.value).toBe('modifiedValue');
-    expect(wrapper.findAll('input')[1].element.value).toBe('modifiedNestedValue')
+    expect(wrapper.findAll('input')[0].element.value).toBe('modifiedValue')
+    expect(wrapper.findAll('input')[1].element.value).toBe(
+      'modifiedNestedValue'
+    )
 
     // Click the "Reset to Initial" button
     await findSubmitButton().trigger('click')
@@ -121,5 +145,29 @@ describe('useForm', () => {
       basicValues.fieldName,
       basicValues.nestedField.nestedFieldName,
     ])
+  })
+
+  it('calls submit function on form submit', async () => {
+    const wrapper = mount(App, {
+      global: {
+        plugins: [ElementPlus],
+      },
+    })
+    const findSubmitButton = () => wrapper.find('.submitButton')
+    await wrapper
+      .findComponent({ ref: 'fieldNameInput' })
+      .setValue('modifiedValue')
+
+    findSubmitButton().trigger('click')
+
+    await nextTick()
+
+    expect(submitMock).toHaveBeenCalledWith(
+      {
+        fieldName: 'modifiedValue',
+        nestedField: { nestedFieldName: 'nestedInitialValue' },
+      },
+      { valid: true, fields: undefined }
+    )
   })
 })

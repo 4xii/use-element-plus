@@ -35,7 +35,6 @@ export const isError = (val: unknown): val is Error => val instanceof Error
 export const isObject = (val: unknown): val is Record<any, any> =>
   val !== null && typeof val === 'object'
 
-
 export const objectToString = Object.prototype.toString
 
 export const toTypeString = (value: unknown): string =>

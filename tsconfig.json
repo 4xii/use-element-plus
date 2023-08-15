@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "preserve",
     "target": "esnext",
     "module": "esnext",
     "lib": ["es2022"],
@@ -9,7 +10,7 @@
     "skipLibCheck": true,
     "noUnusedLocals": true,
     "resolveJsonModule": true,
-    "types": ["node","vitest/globals"],
+    "types": ["node", "vitest/globals"]
   },
   "include": ["src", "tests"]
 }

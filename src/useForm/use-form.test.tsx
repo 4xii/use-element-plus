@@ -1,10 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
-import { type FormInstance } from 'element-plus'
+import {
+  type FormInstance,
+  type FormItemInstance,
+  type FormRules,
+} from 'element-plus'
 import * as ElementPlus from 'element-plus'
 import { mount } from '@vue/test-utils'
 import { useForm } from './index'
-import '@testing-library/jest-dom'
+
 describe('useForm', () => {
   const defaultValues = {
     fieldName: 'initialValue',
@@ -24,11 +28,28 @@ describe('useForm', () => {
   const App = defineComponent({
     setup() {
       const formRef = ref<FormInstance>()
-      const { formData, resetFields, handleSubmit } = useForm({
+      const { formData, resetFields, handleSubmit, handleValidate } = useForm({
         formRef,
         initialFormData: defaultValues,
         basicFormData: basicValues,
       })
+
+      const rules: FormRules = {
+        fieldName: [
+          {
+            required: true,
+            message: 'Please input fieldName',
+            trigger: 'change',
+          },
+        ],
+        'nestedField.nestedFieldName': [
+          {
+            required: true,
+            message: 'Please input nestedFieldName',
+            trigger: 'change',
+          },
+        ],
+      }
 
       const handleInitialReset = () => {
         resetFields({ type: 'initial' })
@@ -39,16 +60,29 @@ describe('useForm', () => {
       }
 
       const submit = handleSubmit(submitMock)
+
+      const validate = async () => {
+        await handleValidate()
+      }
+
       return () => (
         <div>
-          <el-form ref={formRef} model={formData.value}>
-            <el-form-item label="fieldName">
+          <el-form ref={formRef} rules={rules} model={formData.value}>
+            <el-form-item
+              ref="fieldNameItem"
+              props="fieldName"
+              label="fieldName"
+            >
               <el-input
                 v-model={formData.value.fieldName}
                 ref="fieldNameInput"
               />
             </el-form-item>
-            <el-form-item label="nestedField">
+            <el-form-item
+              ref="nestedFieldNameItem"
+              props="nestedField.nestedFieldName"
+              label="nestedField"
+            >
               <el-input
                 v-model={formData.value.nestedField.nestedFieldName}
                 ref="nestedFieldNameInput"
@@ -63,6 +97,9 @@ describe('useForm', () => {
           </button>
           <button class="submitButton" onClick={submit}>
             submit
+          </button>
+          <button class="validateButton" onClick={validate}>
+            validate
           </button>
         </div>
       )
@@ -169,5 +206,27 @@ describe('useForm', () => {
       },
       { valid: true, fields: undefined }
     )
+  })
+
+  it('calls validate function', async () => {
+    const wrapper = mount(App, {
+      global: {
+        plugins: [ElementPlus],
+      },
+    })
+
+    const findSubmitButton = () => wrapper.find('.validateButton')
+
+    const fieldNameItem: FormItemInstance = wrapper.findComponent({
+      ref: 'fieldNameItem',
+    }).vm
+
+    await wrapper.findComponent({ ref: 'fieldNameInput' }).setValue('')
+
+    await nextTick()
+
+    await findSubmitButton().trigger('click')
+    await nextTick()
+    expect(fieldNameItem.validateMessage).toBe('Please input fieldName')
   })
 })

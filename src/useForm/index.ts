@@ -3,7 +3,8 @@ import { cloneDeep, get, set } from 'lodash'
 import { isArray, isString } from '../common/general'
 import {
   type FieldValues,
-  type IHandleSubmit,
+  type UseFormHandleSubmit,
+  type UseFormHandleValidate,
   type UseFormProps,
   type UseFormResetField,
 } from './type'
@@ -41,7 +42,7 @@ const useForm = <TFieldValues extends FieldValues = FieldValues>(
     }
   }
 
-  const handleSubmit: IHandleSubmit<TFieldValues> = (submit) => {
+  const handleSubmit: UseFormHandleSubmit<TFieldValues> = (submit) => {
     return () => {
       if (typeof submit !== 'function') {
         throw new TypeError('Submit function is required')
@@ -53,10 +54,22 @@ const useForm = <TFieldValues extends FieldValues = FieldValues>(
     }
   }
 
+  /** 主动校验 */
+  const handleValidate: UseFormHandleValidate<TFieldValues> = async (
+    props?
+  ) => {
+    if (!formRef?.value) return
+    const res = await (props
+      ? formRef.value.validateField(props)
+      : formRef.value.validate())
+    return res
+  }
+
   return {
     formData,
     resetFields,
     handleSubmit,
+    handleValidate,
   }
 }
 export { useForm }

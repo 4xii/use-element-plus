@@ -22,12 +22,16 @@ export type UseFormResetField<TFieldValues extends FieldValues> = <
   type?: FormDataType
 }) => void
 
-export type IHandleSubmit<IDefaultValues> = (
+export type UseFormHandleSubmit<TFieldValues extends FieldValues> = (
   submit: (
-    values: UnwrapRef<IDefaultValues>,
+    values: UnwrapRef<TFieldValues>,
     validRes: TupleToObject<
       Parameters<FormValidateCallback>,
       ['valid', 'fields']
     >
   ) => void
 ) => () => void
+
+export type UseFormHandleValidate<TFieldValues extends FieldValues> = (
+  props?: Arrayable<FieldPath<TFieldValues>> | undefined
+) => Promise<boolean | undefined>

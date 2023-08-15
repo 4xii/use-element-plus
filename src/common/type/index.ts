@@ -1,3 +1,3 @@
 export * from './arrayable'
 export * from './path'
-export * from './tupleToObject'
+export * from './tuple-to-object'

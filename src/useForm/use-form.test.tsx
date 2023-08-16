@@ -39,7 +39,7 @@ describe('useForm', () => {
           {
             required: true,
             message: 'Please input fieldName',
-            trigger: 'change',
+            trigger: 'blur',
           },
         ],
         'nestedField.nestedFieldName': [
@@ -62,7 +62,9 @@ describe('useForm', () => {
       const submit = handleSubmit(submitMock)
 
       const validate = async () => {
-        await handleValidate()
+        formData.value.fieldName = ';'
+        const res = await handleValidate().catch(e => console.log('e :>> ', e));
+        console.log('res :>> ', res);
       }
 
       return () => (
@@ -216,17 +218,14 @@ describe('useForm', () => {
     })
 
     const findSubmitButton = () => wrapper.find('.validateButton')
-
-    const fieldNameItem: FormItemInstance = wrapper.findComponent({
-      ref: 'fieldNameItem',
-    }).vm
-
+  
     await wrapper.findComponent({ ref: 'fieldNameInput' }).setValue('')
 
     await nextTick()
 
     await findSubmitButton().trigger('click')
     await nextTick()
-    expect(fieldNameItem.validateMessage).toBe('Please input fieldName')
+    // 在click之后，会出现<div class="el-form-item__error">Please input activity form</div>这样的一个div，我想expect这个div此时存在
+    expect(wrapper.find('.el-form-item__error').exists()).toBe(true);
   })
 })

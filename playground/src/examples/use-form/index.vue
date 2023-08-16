@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { useForm } from 'use-element-plus'
-import { FormInstance, FormRules } from 'element-plus'
+import { type FormInstance, type FormRules } from 'element-plus'
 
 interface RuleForm {
   name: string
@@ -41,7 +41,7 @@ const {
   handleSubmit,
   resetFields,
   handleValidate,
-} = useForm({formRef:ruleFormRef,initialFormData:defaultRuleFormData})
+} = useForm({ formRef: ruleFormRef, initialFormData: defaultRuleFormData })
 
 const rules = reactive<FormRules>({
   name: [
@@ -107,15 +107,24 @@ const submitForm = handleSubmit((data, validRes) => {
   }
 })
 
-const validate = async ()=>{
-  const res = await handleValidate().catch(e => console.log('e :>> ', e))
-  console.log('res :>> ', res);
+const validate = async () => {
+  const res = await handleValidate().catch((error) =>
+    console.log('e :>>', error)
+  )
+  console.log('res :>>', res)
 }
 </script>
 
 <template>
-  <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm" :size="formSize"
-    status-icon>
+  <el-form
+    ref="ruleFormRef"
+    :model="ruleForm"
+    :rules="rules"
+    label-width="120px"
+    class="demo-ruleForm"
+    :size="formSize"
+    status-icon
+  >
     <el-form-item label="Activity name" prop="name">
       <el-input v-model="ruleForm.name" />
     </el-form-item>
@@ -126,13 +135,22 @@ const validate = async ()=>{
       </el-select>
     </el-form-item>
     <el-form-item label="Activity count" prop="count">
-      <el-select-v2 v-model="ruleForm.count" placeholder="Activity count" :options="options" />
+      <el-select-v2
+        v-model="ruleForm.count"
+        placeholder="Activity count"
+        :options="options"
+      />
     </el-form-item>
     <el-form-item label="Activity time" required>
       <el-col :span="11">
         <el-form-item prop="date1">
-          <el-date-picker v-model="ruleForm.date1" type="date" label="Pick a date" placeholder="Pick a date"
-            style="width: 100%" />
+          <el-date-picker
+            v-model="ruleForm.date1"
+            type="date"
+            label="Pick a date"
+            placeholder="Pick a date"
+            style="width: 100%"
+          />
         </el-form-item>
       </el-col>
       <el-col class="text-center" :span="2">
@@ -140,7 +158,12 @@ const validate = async ()=>{
       </el-col>
       <el-col :span="11">
         <el-form-item prop="date2">
-          <el-time-picker v-model="ruleForm.date2" label="Pick a time" placeholder="Pick a time" style="width: 100%" />
+          <el-time-picker
+            v-model="ruleForm.date2"
+            label="Pick a time"
+            placeholder="Pick a time"
+            style="width: 100%"
+          />
         </el-form-item>
       </el-col>
     </el-form-item>
@@ -168,7 +191,8 @@ const validate = async ()=>{
       <el-button type="primary" @click="submitForm()"> Create </el-button>
       <el-button @click="resetFields()">Reset</el-button>
       <!-- <el-button type="info" @click="clearValidate()">Clear Validate</el-button> 添加了清除校验的按钮 -->
-      <el-button type="warning" @click="validate()">Validate Form</el-button> <!-- 添加了手动校验表单的按钮 -->
+      <el-button type="warning" @click="validate()">Validate Form</el-button>
+      <!-- 添加了手动校验表单的按钮 -->
     </el-form-item>
   </el-form>
 </template>

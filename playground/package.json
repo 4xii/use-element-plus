@@ -14,7 +14,6 @@
     "@vueuse/core": "^10.2.1",
     "element-plus": "2.3.3",
     "quasar": "^2.12.2",
-    "use-element-plus": "file:..",
     "vue": "^3.2.47"
   },
   "devDependencies": {

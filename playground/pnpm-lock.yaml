@@ -14,9 +14,6 @@ dependencies:
   quasar:
     specifier: ^2.12.2
     version: 2.12.2
-  use-element-plus:
-    specifier: file:..
-    version: file:..
   vue:
     specifier: ^3.2.47
     version: 3.2.47
@@ -3097,9 +3094,3 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
-
-  file:..:
-    resolution: {directory: .., type: directory}
-    name: use-element-plus
-    engines: {node: '>=16.14.0'}
-    dev: false

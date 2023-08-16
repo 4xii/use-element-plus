@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
-import { type FormInstance, type FormRules } from 'element-plus'
+import {
+  type FormInstance,
+  type FormRules,
+} from 'element-plus'
 import * as ElementPlus from 'element-plus'
 import { mount } from '@vue/test-utils'
-import { rAF } from '../common/test-utils/tick'
 import { useForm } from './index'
+import { rAF } from '../common/test-utils/tick'
 
 describe('useForm', () => {
   const defaultValues = {
@@ -21,7 +24,7 @@ describe('useForm', () => {
     },
   }
 
-  const submitMock = vi.fn()
+  const submitMock = vi.fn();
 
   const App = defineComponent({
     setup() {
@@ -60,7 +63,9 @@ describe('useForm', () => {
       const submit = handleSubmit(submitMock)
 
       const validate = async () => {
-        await handleValidate()
+        console.log('formData.value :>> ', formData.value);
+        const res = await handleValidate();
+        console.log('res :>> ', res);
       }
 
       return () => (
@@ -214,7 +219,7 @@ describe('useForm', () => {
     })
     // vi.useFakeTimers()
     const findSubmitButton = () => wrapper.find('.validateButton')
-
+  
     await wrapper.findComponent({ ref: 'fieldNameInput' }).setValue('')
     await findSubmitButton().trigger('click')
     await nextTick()

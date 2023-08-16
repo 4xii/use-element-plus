@@ -17,5 +17,5 @@
       "use-element-plus": ["../src/index.ts"]
     }
   },
-  "include": ["src", "*", "../../packages/shim.d.ts"],
+  "include": ["src", "*", "../../packages/shim.d.ts"]
 }

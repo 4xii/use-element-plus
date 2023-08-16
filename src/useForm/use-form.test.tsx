@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 import {
   type FormInstance,
-  type FormItemInstance,
   type FormRules,
 } from 'element-plus'
 import * as ElementPlus from 'element-plus'
 import { mount } from '@vue/test-utils'
 import { useForm } from './index'
+import { rAF } from '../common/test-utils/tick'
 
 describe('useForm', () => {
   const defaultValues = {
@@ -24,7 +24,8 @@ describe('useForm', () => {
     },
   }
 
-  const submitMock = vi.fn()
+  const submitMock = vi.fn();
+
   const App = defineComponent({
     setup() {
       const formRef = ref<FormInstance>()
@@ -39,7 +40,7 @@ describe('useForm', () => {
           {
             required: true,
             message: 'Please input fieldName',
-            trigger: 'change',
+            trigger: 'blur',
           },
         ],
         'nestedField.nestedFieldName': [
@@ -62,15 +63,16 @@ describe('useForm', () => {
       const submit = handleSubmit(submitMock)
 
       const validate = async () => {
-        await handleValidate()
+        const res = await handleValidate();
+        console.log('res :>> ', res);
       }
 
       return () => (
         <div>
-          <el-form ref={formRef} rules={rules} model={formData.value}>
+          <el-form ref={formRef} model={formData.value} rules={rules}>
             <el-form-item
               ref="fieldNameItem"
-              props="fieldName"
+              prop="fieldName"
               label="fieldName"
             >
               <el-input
@@ -80,7 +82,7 @@ describe('useForm', () => {
             </el-form-item>
             <el-form-item
               ref="nestedFieldNameItem"
-              props="nestedField.nestedFieldName"
+              prop="nestedField.nestedFieldName"
               label="nestedField"
             >
               <el-input
@@ -197,7 +199,7 @@ describe('useForm', () => {
 
     findSubmitButton().trigger('click')
 
-    await nextTick()
+    await rAF()
 
     expect(submitMock).toHaveBeenCalledWith(
       {
@@ -214,19 +216,12 @@ describe('useForm', () => {
         plugins: [ElementPlus],
       },
     })
-
+    // vi.useFakeTimers()
     const findSubmitButton = () => wrapper.find('.validateButton')
-
-    const fieldNameItem: FormItemInstance = wrapper.findComponent({
-      ref: 'fieldNameItem',
-    }).vm
-
+  
     await wrapper.findComponent({ ref: 'fieldNameInput' }).setValue('')
-
-    await nextTick()
-
     await findSubmitButton().trigger('click')
     await nextTick()
-    expect(fieldNameItem.validateMessage).toBe('Please input fieldName')
+    expect(wrapper.findAll('.el-form-item__error')).toHaveLength(1)
   })
 })

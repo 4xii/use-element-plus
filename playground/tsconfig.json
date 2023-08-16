@@ -11,7 +11,7 @@
     "esModuleInterop": true,
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
-    "types": ["node", "vite/client", "jest","element-plus/global"],
+    "types": ["node", "vite/client", "jest", "element-plus/global"],
     "typeRoots": ["./node_modules/@types"],
     "paths": {
       "use-element-plus": ["../src/index.ts"]

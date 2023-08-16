@@ -1,4 +1,4 @@
-import { nextTick } from "vue"
+import { nextTick } from 'vue'
 
 export const rAF = async () => {
   return new Promise((res) => {

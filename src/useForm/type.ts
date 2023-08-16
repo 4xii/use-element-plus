@@ -17,7 +17,7 @@ export type UseFormProps<TFieldValues> = {
 
 export type UseFormResetField<TFieldValues extends FieldValues> = <
   TFieldName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->(option: {
+>(option?: {
   props?: Arrayable<FieldPath<TFieldName>> | undefined
   type?: FormDataType
 }) => void

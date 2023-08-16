@@ -1,3 +1,13 @@
 node_modules
 dist
 .eslintcache
+coverage
+.turbo
+.idea
+dev-dist
+docs/.vitepress/cache
+.vercel
+.vite-inspect
+
+.DS_Store
+.pnpm-debug.log*

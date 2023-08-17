@@ -1,7 +1,8 @@
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { cloneDeep, get, set } from 'lodash'
 import { isArray, isString } from '../common/general'
 import {
+UseFormHandleScrollToField,
   type FieldValues,
   type UseFormHandleSubmit,
   type UseFormHandleValidate,
@@ -16,8 +17,13 @@ const useForm = <TFieldValues extends FieldValues = FieldValues>(
 
   const formData = ref(cloneDeep(initialFormData))
 
+  const formState = reactive({
+    isLoading:false,
+    // TODO
+  })
+
   const resetFields: UseFormResetField<TFieldValues> = (
-    option = { type: 'initial' }
+    option = { type: 'initial' ,clearValid:true }
   ) => {
     const { props, type } = option
 
@@ -40,6 +46,11 @@ const useForm = <TFieldValues extends FieldValues = FieldValues>(
         resetValue(keyPath)
       })
     }
+
+    if(option.clearValid){
+      if (!formRef.value) return
+      formRef.value.clearValidate(props)
+    }
   }
 
   const handleSubmit: UseFormHandleSubmit<TFieldValues> = (submit) => {
@@ -48,8 +59,10 @@ const useForm = <TFieldValues extends FieldValues = FieldValues>(
         throw new TypeError('Submit function is required')
       }
       if (!formRef.value) return
-      formRef.value.validate((valid, fields) => {
-        submit(formData.value, { valid, fields })
+      formRef.value.validate(async (valid, fields) => {
+        formState.isLoading = true
+        await submit(formData.value, { valid, fields })
+        formState.isLoading = false
       })
     }
   }
@@ -65,11 +78,18 @@ const useForm = <TFieldValues extends FieldValues = FieldValues>(
     return res
   }
 
+  const scrollToField:UseFormHandleScrollToField<TFieldValues> = (prop) =>{
+    if (!formRef?.value) return
+    formRef?.value.scrollToField(prop)
+  }
+
   return {
     formData,
     resetFields,
     handleSubmit,
     handleValidate,
+    scrollToField,
+    formState
   }
 }
 export { useForm }

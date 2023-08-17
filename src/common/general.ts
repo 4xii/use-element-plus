@@ -61,3 +61,6 @@ export const safeJSONParse = <T = unknown>(data: string): T | {} => {
 
   return res
 }
+
+export const isFunction =  (value: unknown): value is Function =>
+  typeof value === 'function';

@@ -30,7 +30,7 @@ const defaultRuleFormData: RuleForm = {
   count: '',
   date1: '',
   date2: '',
-  delivery: false,
+  delivery: true,
   type: [],
   resource: '',
   desc: '',
@@ -41,6 +41,7 @@ const {
   handleSubmit,
   resetFields,
   handleValidate,
+  scrollToField
 } = useForm({ formRef: ruleFormRef, initialFormData: defaultRuleFormData })
 
 const rules = reactive<FormRules>({
@@ -98,7 +99,7 @@ const rules = reactive<FormRules>({
   ],
 })
 
-const submitForm = handleSubmit((data, validRes) => {
+const submitForm = handleSubmit(async (data, validRes) => {
   const { valid, fields } = validRes
   if (valid) {
     console.log('submit!')
@@ -121,7 +122,6 @@ const validate = async () => {
     :model="ruleForm"
     :rules="rules"
     label-width="120px"
-    class="demo-ruleForm"
     :size="formSize"
     status-icon
   >
@@ -192,7 +192,6 @@ const validate = async () => {
       <el-button @click="resetFields()">Reset</el-button>
       <!-- <el-button type="info" @click="clearValidate()">Clear Validate</el-button> 添加了清除校验的按钮 -->
       <el-button type="warning" @click="validate()">Validate Form</el-button>
-      <!-- 添加了手动校验表单的按钮 -->
     </el-form-item>
   </el-form>
 </template>

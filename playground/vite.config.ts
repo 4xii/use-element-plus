@@ -1,7 +1,7 @@
-import path from 'node:path'
+import path from 'path'
 import { defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
-import UnoCSS from 'unocss/vite'
+// import UnoCSS from 'unocss/vite'
 import Vue from '@vitejs/plugin-vue'
 import ElementPlus from 'unplugin-element-plus/vite'
 export default defineConfig({
@@ -9,13 +9,18 @@ export default defineConfig({
     outDir: './dist/vite',
   },
   plugins: [
-    UnoCSS(),
+    // UnoCSS(),
     Vue(),
     ElementPlus({}),
     Inspect({
       build: true,
     }),
   ],
+  server:{
+    fs:{
+      allow:['..']
+    }
+  },
   resolve: {
     alias: [
       {

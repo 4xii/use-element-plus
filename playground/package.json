@@ -18,6 +18,7 @@
     "vue": "^3.2.47"
   },
   "devDependencies": {
+    "@cypress/vite-dev-server": "^5.0.5",
     "@rollup/plugin-commonjs": "^25.0.2",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@vitejs/plugin-vue": "^4.2.3",

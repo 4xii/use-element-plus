@@ -30,7 +30,7 @@ const defaultRuleFormData: RuleForm = {
   count: '',
   date1: '',
   date2: '',
-  delivery: false,
+  delivery: true,
   type: [],
   resource: '',
   desc: '',
